@@ -1,104 +1,119 @@
 import styled from "styled-components";
-import { primary } from "../styles/colorProvider";
+import { black, blue, midleGray, red, white } from "../styles/colorProvider";
 
 export const Container = styled.div`
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: ${primary};
 `;
 
-export const Product = styled.div`
-  width: 200px;
-  background-color: red;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  justify-content: column;
-  color: black;
-  height: 100%;
-
-  h3{
-    color: black;
-    font-size:80px;
-  }
-`;
-export const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+export const Header = styled.div`
   display: flex;
+  width: 100%;
+  height: 80px;
+  background-color: ${blue};
   justify-content: center;
   align-items: center;
-  z-index: 999;
 
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  max-width: 400px;
-  width: 80%;
-}
-
-h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0 0 15px 0;
-  color: ${primary};
-}
-
-p {
-  margin-bottom: 25px;
-  color: black;
-}
-
-.modal-buttons {
+  .contentArea{
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+  }
+`
+export const Product = styled.div`
   display: flex;
-  justify-content: flex-end;
-}
+  width: 21%;
+  background-color: ${white};
+  border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
+  height: 300px;
+  -webkit-box-shadow: 5px 5px 15px -5px #000000; 
+  box-shadow: 5px 5px 15px -5px #000000;
+  padding: 0 25px;
+  text-align: justify;
 
-button {
-  padding: 10px 20px;
-  margin-left: 10px;
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
+  .delete{
+    color: ${red};
+    font-weight: 500;
+    cursor: pointer;
+  }
 
-button:hover {
-  background-color: #45a049;
-}
+  .button-container{
+    display: flex;
+    width: 80px;
+    height: 25px;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
 
+    span{
+      color: ${midleGray};
+    }    p{
+      color: ${red};
+      cursor: pointer;
+    }
+
+    button{
+      display: flex;
+      width: 25px;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      border-radius: 3px;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  h3{
+    color: ${black};
+    font-size:30px;
+    margin: 0;
+    font-weight: 500;
+    margin: 20px 0 0 0;
+  }
+  p{
+    font-size: 16px;
+    color: ${black};
+  }
 `;
 
 export const ContentArea = styled.div`
   display: flex;
-  width: 100%;
+  width: 80%;
   height: 100%;
-  flex-direction: row;
-  text-align: center;
-  justify-content: space-around;
+  justify-content: flex-start;
+  gap: 50px;
+  align-items: center;
   flex-wrap: wrap;
+
+  h3{
+    color: ${black};
+  }
 `;
 
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  h1{
+    color: ${black};
+  }
 `;
 
 export const ModalForm = styled.form`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-top: 20px;
 
@@ -106,30 +121,19 @@ export const ModalForm = styled.form`
     font-weight: bold;
   }
 
-  input[type="text"],
-  input[type="number"],
   textarea {
-    width: 100%;
+    width: 330px;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
   }
 
   textarea {
     resize: vertical;
-  }
-`;
-
-export const ModalButton = styled.button`
-  padding: 8px 16px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-
-  &:hover {
-    background-color: #45a049;
+    font-size: 14px;
+    color: ${black};
+    font-family: 'Roboto', sans-serif;
+    padding-left: 20px;
+    margin-left: 7px;
   }
 `;

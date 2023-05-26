@@ -4,13 +4,15 @@ import Modal from "react-modal";
 import { toast } from "react-toastify";
 
 import {
+  Header,
   Container,
   Product,
   ContentArea,
   ModalContent,
   ModalForm,
-  ModalButton,
 } from "./styles";
+import { black, blue, red } from "../styles/colorProvider";
+import { Button, Input } from "../components";
 Modal.setAppElement("#root");
 
 function App() {
@@ -66,12 +68,16 @@ function App() {
 
   const handleAddProduct = async () => {
     try {
+      const precoValue =
+        typeof preco === "string"
+          ? preco.replace("R$", "").replace(",", ".")
+          : preco;
       await api({
         method: "POST",
         url: `/produtos`,
         data: {
           nome: nome,
-          preco: parseFloat(preco),
+          preco: parseFloat(precoValue),
           descricao: descricao,
         },
       });
@@ -83,6 +89,7 @@ function App() {
       setNome("");
       setDescricao("");
       setPreco("");
+      fetchProducts();
     } catch (error) {
       toast.error(error, {
         position: toast.POSITION.TOP_RIGHT,
@@ -127,6 +134,9 @@ function App() {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    setNome("");
+    setDescricao("");
+    setPreco("");
   };
 
   const handleFilterChange = (e) => {
@@ -144,43 +154,54 @@ function App() {
 
   return (
     <Container>
-      <input
-        type="text"
-        value={filter}
-        onChange={handleFilterChange}
-        placeholder="Filtrar por nome do produto"
-      />
+      <Header>
+        <div className="contentArea">
+          <Input
+            type="text"
+            value={filter}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por nome do produto"
+          />
+
+          <p>Total: R$ {totalPrice.toFixed(2)}</p>
+        </div>
+      </Header>
+      <h3 style={{ fontSize: "32px", color: `${black}` }}>Lista de produtos</h3>
       <ContentArea>
         {!filteredProducts.length ? (
           <h3>Nenhum produto encontrado</h3>
         ) : (
           filteredProducts.map((product) => (
             <Product key={product.id}>
-              <h3 style={{ fontSize: "50px", color: "black" }}>
-                {product.nome}
-              </h3>
+              <h3>{product.nome}</h3>
               <p>{product.descricao}</p>
-              {product.preco && <p>Preço: R${product.preco.toFixed(2)}</p>}
+              {product.preco && <p>R${product.preco.toFixed(2)}</p>}
 
-              <div>
-                <button onClick={() => handleQuantidadeChange(product.id, -1)}>
+              <div className="button-container">
+                <button
+                  style={{ backgroundColor: `${red}` }}
+                  onClick={() => handleQuantidadeChange(product.id, -1)}
+                >
                   -
                 </button>
                 <span>{product.quantidade}</span>
-                <button onClick={() => handleQuantidadeChange(product.id, 1)}>
+                <button
+                  style={{ backgroundColor: `${blue}` }}
+                  onClick={() => handleQuantidadeChange(product.id, 1)}
+                >
                   +
                 </button>
               </div>
-              <button onClick={() => handleProductDelete(product.id)}>
+              <p
+                className="delete"
+                onClick={() => handleProductDelete(product.id)}
+              >
                 Excluir
-              </button>
+              </p>
             </Product>
           ))
         )}
       </ContentArea>
-
-      <button onClick={openModal}>Criar Produto</button>
-      <p>Valor Total: R$ {totalPrice.toFixed(2)}</p>
 
       <Modal
         isOpen={modalIsOpen}
@@ -191,6 +212,7 @@ function App() {
           },
           content: {
             width: "400px",
+            height: "420px",
             margin: "0 auto",
             borderRadius: "8px",
             padding: "20px",
@@ -200,41 +222,53 @@ function App() {
         }}
       >
         <ModalContent>
-          <h2>Criar Produto</h2>
-          <ModalForm onSubmit={handleAddProduct}>
-            <div>
-              <label htmlFor="name">Nome:</label>
-              <input
-                type="text"
-                id="name"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="price">Preço:</label>
-              <input
-                type="number"
-                id="price"
-                value={preco}
-                onChange={(e) => setPreco(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="description">Descrição:</label>
-              <textarea
-                id="description"
-                value={descricao}
-                onChange={(e) => setDescricao(e.target.value)}
-              ></textarea>
-            </div>
-            <ModalButton type="submit">Cadastrar Produto</ModalButton>
-            <ModalButton type="button" onClick={closeModal}>
+          <h1>Cadastrar produto</h1>
+          <ModalForm>
+            <Input
+              placeholder="Nome do produto"
+              type="text"
+              id="name"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+
+            <Input
+              placeholder="Preço do produto"
+              numeric
+              price
+              value={preco}
+              onChange={(e) => setPreco(e.target.value)}
+            />
+            <textarea
+              id="description"
+              placeholder="Descrição do produto"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+            ></textarea>
+            <Button
+              style={{ marginTop: "25px", backgroundColor: `${blue}` }}
+              onClick={handleAddProduct}
+              disabled={!nome || !descricao || !preco}
+            >
+              Cadastrar
+            </Button>
+            <Button
+              style={{ color: `${red}` }}
+              outlined
+              type="button"
+              onClick={closeModal}
+            >
               Cancelar
-            </ModalButton>
+            </Button>
           </ModalForm>
         </ModalContent>
       </Modal>
+      <Button
+        onClick={openModal}
+        style={{ margin: "50px 0", backgroundColor: `${blue}` }}
+      >
+        Criar Produto
+      </Button>
     </Container>
   );
 }
